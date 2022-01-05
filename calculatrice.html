@@ -1,0 +1,305 @@
+<!--**********************************************************************************
+*                                                  ZM Jvascript Calculator v1.20.02.2008                                               *
+*                                                        une calculatrice en javascript                                                          *
+*                                                                                                                                                                     * 
+*                  Programmeur   : ZAAGANE Mohammed                                                                                 *   
+*                  E-mail               : zagmoh2005@yahoo.fr                                                                               *
+*                  Site web           : http://zaagane-mohammed.ifrance.com                                                    *    
+*                  Date source      : Mardi 19 février 2008                                                                               *
+*                  Version source : 1.20.02.2008                                                                                               *   
+**********************************************************************************-->
+<html>
+       <head>
+	          <title>Calculatrice en javascript, javascript calculator, &#1570;&#1604;&#1577; &#1581;&#1575;&#1587;&#1576;&#1577; &#1576;&#1575;&#1604;&#1580;&#1575;&#1601;&#1575; &#1587;&#1603;&#1585;&#1610;&#1576;&#1578;</title>
+			  
+			  <script language="javascript">			  
+			  <!--
+			  //variable globales
+			  var Nombre1;// l'operand1
+			  var Nombre2;// l'operand2
+			  var Resultat;// resultat de l'eparation
+			  var Operation;// operation 0:addition, 1:soustraction, 2:multiplucation, 3:division, 4:puissance
+			  
+			  /* //calcule x puissance y
+			  function Puissance(x,y)
+			  {
+			        var resultat=1;					 
+					 for (i=0; i<y; i++)					 
+					 {
+					        resultat*=x;							
+					 }	
+					 return resultat;
+					 //ou
+					// return Math.pow(x,y);
+			  }*/
+              
+			  
+			  // effacer un digit par le bouton "<----"
+			  function Effacer__Digit(Text)
+			  {
+			         return Text.substr(0,Text.length-1);
+			  }
+			  //---------------------------------------------------------------------------------
+			  
+			  // ajouter la signe "-" au debut du nombre si elle n'existe pas
+			  // et la retirer si elle existe
+			  function Nigative_Nombre(Text)
+			  {
+			         
+					 if(Text.charAt(0)!="-")//si le premier digit est déférent de la signe "-"
+					 {
+					       var temp="-";						   
+						   return temp+Text;
+					 }
+                     else
+                     {
+					       return Text.substr(1,Text.length);
+					 }					 					 
+			  }
+			  //-----------------------------------------------------------------------
+			  
+			  //ajouter le point décimale '.' au nombre 
+			  function Ajouter_Point(Text)
+			  {
+			         var existe="0";
+					 for(i=0;i<Text.length;i++)
+					 {
+					        if(Text.charAt(i)==".")
+							{
+							      existe="1";
+								  break;
+							}
+					 }
+					 if((existe=="0") &&(Text.length!=0))
+					 {
+					        return Text+".";
+					 }
+					 else
+					 {					        
+							//alert("le point décimale existe déja ou pas le bon emplacement!");
+							return Text;
+					 }
+					 /*if(existe=="1")
+					 {
+					        alert("le point décimale existe déja!");
+							return Text;
+					 }*/
+			  }
+			  //-----------------------------------------------
+			  
+			  // ajouter un chiffre a l'edit principale
+			  function Ajouter_Chiffre(Text,chiffre)
+			  {
+			        if((Text.charAt(0)=="0") && (Text.charAt(1)!="."))// s'il ya un zero au debut et il n'est pas suivé d'un point décimale
+					{
+					        return Text.substr(1,Text.length)+chiffre;// ce zero sera effacé
+					}
+					else// sinon
+					{
+					        return Text+chiffre; // ajouter le chiffre au edit principale
+					}
+			  }  
+			  //--------------------------------------------
+			  
+			  // tester si le nombre est correcte (ne contient que des chiffres, point décimale, (signe '-'au debut) ,e:exposant ,+)  
+			  function Teste_Nombre(Text)
+			  {			      
+					for(i=0;i<Text.length;i++)
+                    {
+					       
+						   if( (Text.charAt(i)!='0') && (Text.charAt(i)!='1') && (Text.charAt(i)!='2')
+						   &&(Text.charAt(i)!='3') && (Text.charAt(i)!='4') && (Text.charAt(i)!='5')
+						   && (Text.charAt(i)!='6') && (Text.charAt(i)!='7') && (Text.charAt(i)!='8')
+						   && (Text.charAt(i)!='9') && (Text.charAt(i)!='-') && (Text.charAt(i)!='.') && (Text.charAt(i)!='e') && (Text.charAt(i)!='E') && (Text.charAt(i)!='+'))
+						   {
+						           return false;
+						   }
+						   if((i!=0) && (Text.charAt(i)=='-'))
+						   {
+						           return false;
+						   }
+						   if((i==0) && ((Text.charAt(i)=='.') || (Text.charAt(i)==',')))
+						   {
+						           return false;
+						   }
+						   
+					}
+                    return true; 					
+			  }
+			  //----------------------------------------------
+			  
+			  // affecter une valeur a la variable globale Nombre1
+			  /*tester la chaine ecrit  dans l'edit principale  et la convertir en nombre  en utilisant la fonction parseFloat()  en fin l'affecter 
+			    a la variable Nombre1 */
+			  function Set_Nombre_1(Text)
+			  {
+			         if((Text.length!=0) && (Teste_Nombre(Text)==true))// si la chaine entrée dans l'edit principale correspent a un nombre valide
+					 {
+					        Nombre1=parseFloat(Text); // convertir la chaine en un nombre. 							
+							return true;
+					 }
+					 else
+					 {
+					        alert("Veuillez entrer un nombre valide");
+							return false;
+					 }
+                      					 
+					
+			  }
+			  //-----------------------------------------------------------------
+			  
+			  // affecter une valeur a la variable globale Nombre2
+			  /*tester la chaine ecrit  dans l'edit principale  et la convertir en nombre  en utilisant la fonction parseFloat()  en fin l'affecter 
+			    a la variable Nombre2 */
+			  function Set_Nombre_2(Text)
+			  {
+			         if((Text.length!=0) && (Teste_Nombre(Text)==true))// si la chaine entrée dans l'edit principale correspent a un nombre valide
+					 {
+					        Nombre2=parseFloat(Text); // convertir la chaine en un nombre. 							
+							return true;
+					 }
+					 else
+					 {
+					        alert("Veuillez entrer un nombre valide");
+							return false;
+					 }				 
+					 
+			  }
+			  //-----------------------------------------------------------------
+			  // selectionner l'opération a effectuer :
+			  /*  0:addition, 1:soustraction, 2:multiplication 3: division 4:puissance*/
+			  function Set_Operation(operation)
+			  {
+			         Operation=operation;
+			  }
+			  //---------------------------------------------------------------
+			  
+			  // calculer le resultat			  
+			  function Calcule_Resultat()
+			  {			          
+					  switch (Operation)
+					  {
+					           case 0 :
+							   {
+							          Resultat=Nombre1+Nombre2;
+							   }
+							   break;
+							   
+							   case 1 :
+							   {
+							          Resultat=Nombre1-Nombre2;
+							   }
+							   break;
+							   
+							   case 2 :
+							   {
+							          Resultat=Nombre1*Nombre2;
+							   }
+							   break;
+							   
+							   case 3 :
+							   {
+							          if(Nombre2!=0)
+									  {
+									          Resultat=Nombre1/Nombre2; 
+									  }
+									  else
+									  {
+									          alert("erreur : division par zero");
+											  Resultat="erreur division par zero";
+									  }
+									  
+							   }
+							   break;
+							   
+							   case 4 :
+							   {
+							          Resultat=Math.pow(Nombre1 , Nombre2);
+							   }
+							   break;
+					  }
+			  }
+			  
+			  //-->
+			 			  
+			  </script>
+	   </head>
+	   
+	   <body bgcolor="black" text="lime" onload="";>
+	          
+			  <b><font size="36" face="times new romane">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;ZM JSCalculator v1.20.02.2008</font></b>
+			  
+			  <hr size="2" color="yellow" width="100%"></hr>
+			  <br/>
+			  
+			  <table border="10" align="center" CELLPADDING="10"><tr><td>
+			  
+			  <table align="center" size="50" border="4" name="Table1" >
+			          <tr>
+					       <td><input type="text" name="Maim_Edit" size="70%" OnChange="Maim_Edit.value=Effacer_Zeros(Maim_Edit.value)";></td>
+                           
+					  </tr>					  
+			  </table>
+              <br/>
+              <table align="center" border="4" name="Table2" >
+			          <tr>
+					       <td><input type="button" name="btn_Effacer" value="   effacer  " OnClick="Maim_Edit.value=''"></td>						   
+						   <td><input type="button" name="btn_Effacer_Digit" value="    <---    " OnClick="Maim_Edit.value= Effacer__Digit(Maim_Edit.value);"></td> 						   						   
+					  </tr>
+              <table>  			  
+			  <br/>
+			  
+			  <table border="4" align="center" name="Table3">
+			           <tr>
+					        <td><input type="button" name="btn_0" value="    0    " OnClick="Maim_Edit.value=Ajouter_Chiffre(Maim_Edit.value,'0');">  </td>
+							<td><input type="button" name="btn_1" value="    1    " OnClick="Maim_Edit.value=Ajouter_Chiffre(Maim_Edit.value,'1');"> </td>
+							<td><input type="button" name="btn_2" value="    2    " OnClick="Maim_Edit.value=Ajouter_Chiffre(Maim_Edit.value,'2')">  </td>			
+							<td><input type="button" name="btn_3" value="    3    " OnClick="Maim_Edit.value=Ajouter_Chiffre(Maim_Edit.value,'3');"> </td>
+					   </tr>
+					   
+					   <tr>
+					        
+							<td><input type="button" name="btn_4" value="    4    " OnClick="Maim_Edit.value=Ajouter_Chiffre(Maim_Edit.value,'4');"> </td>
+							<td><input type="button" name="btn_5" value="    5    " OnClick="Maim_Edit.value=Ajouter_Chiffre(Maim_Edit.value,'5');"> </td>
+							<td><input type="button" name="btn_6" value="    6    " OnClick="Maim_Edit.value=Ajouter_Chiffre(Maim_Edit.value,'6');"> </td>
+							<td><input type="button" name="btn_7" value="    7    " OnClick="Maim_Edit.value=Ajouter_Chiffre(Maim_Edit.value,'7');"> </td>
+					   </tr>
+					   
+					   <tr>
+					        
+							
+							<td><input type="button" name="btn_8" value="    8    " OnClick="Maim_Edit.value=Ajouter_Chiffre(Maim_Edit.value,'8');"> </td>
+							<td><input type="button" name="btn_9" value="    9    " OnClick="Maim_Edit.value=Ajouter_Chiffre(Maim_Edit.value,'9');"></td>
+							<td><input type="button" name="btn_point" value="     .    " OnClick="Maim_Edit.value=Ajouter_Point(Maim_Edit.value);"></td>
+							<td><input type="button" name="btn_sign" value="   +/-  " OnClick="Maim_Edit.value=Nigative_Nombre(Maim_Edit.value);"></td>
+					   </tr>
+					   					   
+			  </table>
+			  
+			  
+			  <table border ="4" align="center" name="Table4" >
+			           <tr>
+					        <td><input type="button" name="btn_add" value="    +    " OnClick="if(Set_Nombre_1(Maim_Edit.value)){ Set_Operation(0); Maim_Edit.value='';}"> </td>
+							<td><input type="button" name="btn_sous" value="   --    " OnClick="if(Set_Nombre_1(Maim_Edit.value)){ Set_Operation(1); Maim_Edit.value='';}"> </td>							
+							<td><input type="button" name="btn_mult" value="    x    " OnClick="if(Set_Nombre_1(Maim_Edit.value)){ Set_Operation(2); Maim_Edit.value='';}"> </td>
+							<td><input type="button" name="btn_div" value="    /    " OnClick="if(Set_Nombre_1(Maim_Edit.value)){ Set_Operation(3); Maim_Edit.value='';}"> </td>
+							<td><input type="button" name="btn_puissance" value=" x^y " OnClick="if(Set_Nombre_1(Maim_Edit.value)){ Set_Operation(4); Maim_Edit.value='';}"> </td>
+					   </tr>
+                       
+			  </table>
+			  <br/>
+			  <table border="4" align="center" name="Table5">
+			           <tr>
+					        <td><input type="button" name="btn_reslt" value="        =       " OnClick="if(Set_Nombre_2(Maim_Edit.value)){Calcule_Resultat(); Maim_Edit.value=Resultat;}"> </td>
+                       </tr>
+			  </table>			  
+			  </td></tr></table>			  
+			  <br/>			  			  
+			  <table align="center"><tr><td>
+			  <input type="button" name="about_btn" value="Apropos..." onclick="alert('     ZM JSCalculator v1.20.02.2008    \n\nProgrammeur : ZAAGANE Mohammed\nE-mail: zagmoh2005@yahoo.fr\nSite web : http://zaagane-mohammed.ifrance.com');" >
+			  </td></tr></table>
+			  <br/>			  
+			  <hr size="2" color="yellow" width="50%"></hr>
+			  
+	   </body>
+</html>
